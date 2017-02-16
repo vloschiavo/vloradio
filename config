@@ -1,0 +1,15 @@
+#Config file for latest Pianobar: 2016.06.02-dev
+# git clone https://github.com/PromyLOPh/pianobar.git
+user = your-email
+password = your-password
+
+# Sade Station:
+#autostart_station = 1006886440595718758
+
+# ZZ Top Station:
+autostart_station = 305936920211194470
+
+audio_quality = high
+event_command = ~/.config/pianobar/eventcmd.sh
+
+fifo = /var/tmp/ctl
