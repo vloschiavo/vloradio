@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Setup global variables for vloradio
+
+# Ephemeral storage directory - I use TMPFS (ramdrive) storage for this to reduce wear leveling of the microSD card on Raspberry Pi 
+export EPHEMERAL="/var/tmp"
+
+export SCRIPTSBASEDIR="${HOME}/src/vloradio"
+export CTLFILE="${EPHEMERAL}/ctl"
+export PATIOBAR="${HOME}/src/Patiobar"
+
+cd $PATIOBAR
+
+if [ ! -p $CTLFILE ]; then
+    mkfifo $CTLFILE
+fi
+
+# Kill any old Patiobar processes running
+/usr/local/bin/pbstop > /dev/null 2>&1
+
+# Kill any old gpio-watch processes running
+killall -g gpio-watch > /dev/null 2>&1 
+
+# Setup GPIO Pins and interrupts for push buttons
+/usr/local/bin/gpio -g mode 6 in     # Sets pin mode to input
+/usr/local/bin/gpio -g mode 6 up     # Sets internal pull-up resistor
+/usr/local/bin/gpio-watch 6:switch & # Sets up an interrupt on pin 6 with the "switch" type
+
+# Rotary Encoder handler script
+${SCRIPTSBASEDIR}/PianobarVolumeEncoder.py &
+
+#Start a screen session called 'pianobar' and launch the pianobar binary
+/usr/bin/screen -S pianobar -d -m bash -c 'pianobar'
+
+# Give gnu screen and pianobar some time to start up
+sleep 5
+
+# Create a second window in the 'pianobar' screen and launch Patiobar (the web gui) in it
+# Allow stdout and errors to print to this window
+# The "patiobar" after index.js is used as an identifier so we can kill it when stopping.
+/usr/bin/screen -S pianobar -X screen node index.js patiobar & 
+#/usr/bin/screen -S pianobar -X screen node index.js patiobar > /dev/null 2>&1 & 
+ 
+# Print some stuff to that same window of the 'pianobar' screen
+/usr/bin/screen -S pianobar -p 1 -X stuff $'#Go to http://$(hostname):3000/ to launch the Web interface.\r'
+

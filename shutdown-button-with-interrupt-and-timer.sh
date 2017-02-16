@@ -21,8 +21,8 @@
 # Interval at which the button needs to be held
 INTERVAL=3
 
-DISPLAYMESSAGE="$HOME/src/vloradio/DisplayLCDMessage.py"
-PARSEANDWRITE2LCD="$HOME/src/vloradio/ParseAndWrite.py"
+DISPLAYMESSAGE="${SCRIPTSBASEDIR}/DisplayLCDMessage.py"
+PARSEANDWRITE2LCD="${SCRIPTSBASEDIR}/ParseAndWrite.py"
 
 ##################################################################
 # Begin Main

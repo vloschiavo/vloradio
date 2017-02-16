@@ -1,0 +1,19 @@
+#!/bin/bash
+
+echo Closing out Pandora processes...
+
+# Stop the volume knob script
+kill $(ps aux | grep PianobarVolumeEncoder.py | grep -v grep | awk '{ print $2 }')
+
+# send a 'q' to the "pianobar" screen session where pianobar is running to quit pianobar gracefully
+/usr/bin/screen -S pianobar -p 0 -X stuff $'q'
+
+# stop the Node.js session for Patiobar (web interface)
+pkill -xf "node index.js patiobar"
+
+# Kill the gpio-watch (interrupts on gpio pins)
+killall -g gpio-watch
+
+# Quit the screen session named "pianobar"
+screen -X -S pianobar quit
+echo "Pianobar shutdown complete"

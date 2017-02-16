@@ -8,8 +8,8 @@
 
 
 # User Defined variables
-OUTFILE=/var/tmp/pandoraout
-PARSEANDWRITE2LCD=~/.config/pianobar/ParseAndWrite.py
+OUTFILE=${EPHEMERAL}/pandoraout
+PARSEANDWRITE2LCD="${SCRIPTSBASEDIR}/ParseAndWrite.py"
 
 # Put data from piano bar into variables
 while read L; do
@@ -44,8 +44,8 @@ baseurl="${host}:${port}"
 #stationList="${HOME}/.config/pianobar/stationList"
 #currentSong="${HOME}/.config/pianobar/currentSong"
 
-stationList="/var/tmp/stationList"
-currentSong="/var/tmp/currentSong"
+stationList="${EPHEMERAL}/stationList"
+currentSong="${EPHEMERAL}/currentSong"
 
 while read L; do
 	k="`echo "$L" | cut -d '=' -f 1`"

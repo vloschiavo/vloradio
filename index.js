@@ -4,7 +4,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var fs = require('fs');
 
-var fifo = '/home/vloschiavo/src/Patiobar/ctl';
+var fifo = process.env.EPHEMERAL + '/ctl';
 
 server.listen(3000);
 
@@ -13,7 +13,7 @@ app.use(express.static(__dirname + '/views'));
 
 function readCurrentSong() {
 	// var currentSong = fs.readFileSync(process.env.HOME + '/var/tmp/currentSong').toString()
-	var currentSong = fs.readFileSync('/var/tmp/currentSong').toString()
+	var currentSong = fs.readFileSync(process.env.EPHEMERAL + '/currentSong').toString()
 
 	if (currentSong) {
 			var a = currentSong.split(',');
@@ -54,7 +54,7 @@ function PidoraCTL(action) {
 
 function readStations() {
 	//var stations = fs.readFileSync(process.env.HOME + '/var/tmp/stationList').toString().split("\n");
-	var stations = fs.readFileSync('/var/tmp/stationList').toString().split("\n");
+	var stations = fs.readFileSync(process.env.EPHEMERAL + '/stationList').toString().split("\n");
 
 	io.emit('stations', { stations: stations });
 }

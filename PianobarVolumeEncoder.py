@@ -13,6 +13,7 @@
 import time
 import datetime
 import RPi.GPIO as GPIO
+import os
  
 from Queue import Queue
 
@@ -25,8 +26,7 @@ channelB = 5
 q = Queue()
 
 # vloschiavo - change this
-CTLFILE = /home/vloschiavo/src/Patiobar/ctl
-homedir = os.getenv("HOME")
+CTLFILE=(os.getenv("EPHEMERAL")+ "/ctl")
 
 def main():
  GPIO.setmode(GPIO.BCM)
@@ -100,7 +100,7 @@ def roll_callback(channel):
    flags = 0
 
   # Open the FIFO file handle so that we can append control signals to the file for pianobar 
-  f = open("/home/vloschiavo/src/Patiobar/ctl", "a")
+  f = open(os.getenv("CTLFILE"), "a")
  
   # If the knob turned clockwise turn up the volume
   if action > 0:

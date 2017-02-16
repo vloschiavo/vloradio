@@ -3,17 +3,18 @@
 # Created by V. Loschiavo
 # Inspired by: https://github.com/AyMac/Pandoras-Box
 
-#Read the file output from eventcmd.sh in the home/pi/.config/pianobar/scripts/out file
+#Read the file output from eventcmd.sh in the PANDORAOUT file created by eventcmd.sh
 #and print to the LCD Display
 
-# Import sys module to support reading of files
+# Import sys and os modules to support reading of files and environment variables
 import sys
+import os
 
 # Import the Adafruit library: https://github.com/adafruit/Adafruit_Python_CharLCD
 import Adafruit_CharLCD as LCD
 
 # File to read the pandora/pianobar Song Title, Artist, and Station Name
-PANDORAOUT="/var/tmp/pandoraout"
+PANDORAOUT=(os.getenv("EPHEMERAL")+ "/pandoraout")
 
 # LCD/Raspberry Pi pin configuration:
 lcd_rs        = 25  # Note this might need to be changed to 21 for older revision Pi's.
@@ -37,6 +38,8 @@ lcd.clear()
 #Open the file
 f=open(PANDORAOUT, 'r')
 
+
+# Change this to a for loop and loop through LCD rows and lines in the file
 # Read the first line and store it in song
 song = f.readline()
 
@@ -44,8 +47,9 @@ song = f.readline()
 artist = f.readline()
 
 # Third line is Station Name
+#station = f.readline()
 
 lcd.message(artist)
 lcd.message(song)
-
+#lcd.message(station)
 f.close()
