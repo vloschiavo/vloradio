@@ -47,9 +47,8 @@ do
 	else
 		# Display shutdown message
 		$DISPLAYMESSAGE "Shutting Down" "Now Goodbye"
-		#pbstop
-		#sudo shutdown -h now		# Power off the Pi
-		exit
+		pbstop
+		sudo shutdown -h now		# Power off the Pi
 	fi
 	
 done
