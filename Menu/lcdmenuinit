@@ -1,0 +1,25 @@
+#! /bin/sh
+# /etc/init.d/lcdmenuinit
+
+case "$1" in
+  start)
+    echo "Starting lcdmenu"
+    cd /home/vloschiavo/src/vloradio/Menu/
+    sudo -iu vloschiavo /usr/bin/python /home/vloschiavo/src/vloradio/Menu/menu.py &
+  ;;
+  stop)
+    echo "Stopping lcdmenu"
+    kill $(ps aux | grep menu.py | grep -v grep | awk '{ print $2 }')
+  ;;
+  restart)
+    echo "Restarting lcdmenu"
+    kill $(ps aux | grep menu.py | grep -v grep | awk '{ print $2 }')
+    sudo -iu vloschiavo /usr/bin/python /home/vloschiavo/src/vloradio/Menu/menu.py &
+  ;;
+  *)
+    echo "Usage: /etc/init.d/lcdmenuinit {start|stop|restart}"
+    exit 1
+    ;;
+esac
+
+exit 0

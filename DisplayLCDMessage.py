@@ -44,3 +44,21 @@ for i in range(0,lcd_rows):
     # Print the message from the command line argv to the line
     lcd.message(sys.argv[i+1])
 
+'''
+# Degrees C
+lcd.create_char(1, [0,24,24,3,4,4,4,3])
+
+# Heart
+lcd.create_char(2, [0,0,10,31,31,14,4,0]);
+
+# Dot
+lcd.create_char(3, [0,4,10,17,17,10,4,0]);
+
+#Degree Symbol
+lcd.create_char(4, [7,5,7,0,0,0,0,0]);
+ 
+lcd.clear();
+#lcd.backlight(lcd.colors.RED);
+lcd.message('I \x02 n\x03de.js\n');
+lcd.message('The temp is 22\x04C ');
+'''

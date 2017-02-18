@@ -22,10 +22,10 @@ from Queue import Queue
 # channel C is the push button 
 channelA = 13
 channelB = 5
-#channelC = 19
+#channelC = 16
 q = Queue()
 
-# vloschiavo - change this
+# Pianobar control FIFO location:  
 CTLFILE=(os.getenv("EPHEMERAL")+ "/ctl")
 
 def main():
@@ -113,12 +113,13 @@ def roll_callback(channel):
   f.close()
 
  q.put((cur_pos, flags))
- 
+
+''' 
 # If you pushed the button (channelC)
 def push_callback(channel):
  if GPIO.input(channel) == False:
   print 'Push'
-
+'''
 
 if __name__ == '__main__':
  main()
