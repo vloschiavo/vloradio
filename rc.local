@@ -18,6 +18,9 @@ if [ "$_IP" ]; then
 fi
 
 # Start Patiobar / pianobar
-sleep 15 && sudo -iu vloschiavo /usr/local/bin/pbstart 
+export FIRSTBOOT=1
+
+# Sudo to UID 1000
+sudo -iu \#1000 /usr/local/bin/pbstart &
 
 exit 0

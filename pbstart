@@ -2,6 +2,16 @@
 
 # Setup global variables for vloradio
 
+# If $FIRSTBOOT is set in rc.local, then give the pi some time to start before launching
+if [ "$FIRSTBOOT" == "1" ] ; then
+	# Give the Raspberry Pi plenty of time to boot before trying to start vloradio
+	sleep 10
+	export FIRSTBOOT=0
+else 
+	# This script ($0) isn't being called at boot by rc.local, so start normally
+	export FIRSTBOOT=0;
+fi
+
 # Ephemeral storage directory - I use TMPFS (ramdrive) storage for this to reduce wear leveling of the microSD card on Raspberry Pi 
 export EPHEMERAL="/var/tmp"
 
@@ -38,8 +48,9 @@ sleep 5
 # Create a second window in the 'pianobar' screen and launch Patiobar (the web gui) in it
 # Allow stdout and errors to print to this window
 # The "patiobar" after index.js is used as an identifier so we can kill it when stopping.
-/usr/bin/screen -S pianobar -X screen node index.js patiobar & 
+#/usr/bin/screen -S pianobar -X screen node index.js patiobar & 
 #/usr/bin/screen -S pianobar -X screen node index.js patiobar > /dev/null 2>&1 & 
+/usr/bin/screen -S pianobar -X screen node $PATIOBAR/index.js patiobar 
  
 # Print some stuff to that same window of the 'pianobar' screen
 /usr/bin/screen -S pianobar -p 1 -X stuff $'#Go to http://$(hostname):3000/ to launch the Web interface.\r'

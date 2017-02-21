@@ -9,10 +9,10 @@ var fifo = process.env.EPHEMERAL + '/ctl';
 server.listen(3000);
 
 // Routing
-app.use(express.static(__dirname + '/views'));
+app.use(express.static(process.env.PATIOBAR + '/views'));
 
 function readCurrentSong() {
-	// var currentSong = fs.readFileSync(process.env.HOME + '/var/tmp/currentSong').toString()
+	// var currentSong = fs.readFileSync(process.env.HOME + '/currentSong').toString()
 	var currentSong = fs.readFileSync(process.env.EPHEMERAL + '/currentSong').toString()
 
 	if (currentSong) {
@@ -53,7 +53,7 @@ function PidoraCTL(action) {
 }
 
 function readStations() {
-	//var stations = fs.readFileSync(process.env.HOME + '/var/tmp/stationList').toString().split("\n");
+	//var stations = fs.readFileSync(process.env.HOME + '/stationList').toString().split("\n");
 	var stations = fs.readFileSync(process.env.EPHEMERAL + '/stationList').toString().split("\n");
 
 	io.emit('stations', { stations: stations });

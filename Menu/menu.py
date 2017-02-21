@@ -11,9 +11,6 @@
 # This script provides a menu driven application using a parallel LCD, digital encoder, and a button  
 # Support adafruit.com!
 
-# Current progress:
-#  Need to call the rotary encoder from main() and get the results? or not since we're using interrupts? no clue.
-
 import commands
 import os
 from string import split
@@ -82,7 +79,7 @@ lcd.create_char(3, [0,30,24,20,18,2,2,4]);
 #Use this to display special the characters above: 
 #lcd.message('The temp is 22\x01C ');
 
-# Push button handler
+# Rotary Encoder and Push button handler setup
 def RotaryEncoderGPIObutton():
     if DEBUG: 
         print("In RotaryEncoderGPIObutton()")
@@ -399,41 +396,6 @@ def ShowIPAddress():
             break
         sleep(0.25)
 
-'''
-#only use the following if you find useful
-def Use10Network():
-    "Allows you to switch to a different network for local connection"
-    lcd.clear()
-    lcd.message('Are you sure?\nPress Sel for Y')
-    while 1:
-        if lcd.buttonPressed(lcd.LEFT):
-            break
-        if lcd.buttonPressed(lcd.SELECT):
-            # uncomment the following once you have a separate network defined
-            #commands.getoutput("sudo cp /etc/network/interfaces.hub.10 /etc/network/interfaces")
-            lcd.clear()
-            lcd.message('Please reboot')
-            sleep(1.5)
-            break
-        sleep(0.25)
-
-#only use the following if you find useful
-def UseDHCP():
-    "Allows you to switch to a network config that uses DHCP"
-    lcd.clear()
-    lcd.message('Are you sure?\nPress Sel for Y')
-    while 1:
-        if lcd.buttonPressed(lcd.LEFT):
-            break
-        if lcd.buttonPressed(lcd.SELECT):
-            # uncomment the following once you get an original copy in place
-            #commands.getoutput("sudo cp /etc/network/interfaces.orig /etc/network/interfaces")
-            lcd.clear()
-            lcd.message('Please reboot')
-            sleep(1.5)
-            break
-        sleep(0.25)
-'''
 def ShowLatLon():
     if DEBUG:
         print('in ShowLatLon')
@@ -512,62 +474,6 @@ def CameraTimeLapse():
     if DEBUG:
         print('in CameraTimeLapse')
 
-'''
-# Get a word from the UI, a character at a time.
-# Click select to complete input, or back out to the left to quit.
-# Return the entered word, or None if they back out.
-def GetWord():
-    lcd.clear()
-    lcd.blink()
-    sleep(0.75)
-    curword = list("A")
-    curposition = 0
-    while 1:
-        if lcd.buttonPressed(lcd.UP):
-            if (ord(curword[curposition]) < 127):
-                curword[curposition] = chr(ord(curword[curposition])+1)
-            else:
-                curword[curposition] = chr(32)
-        if lcd.buttonPressed(lcd.DOWN):
-            if (ord(curword[curposition]) > 32):
-                curword[curposition] = chr(ord(curword[curposition])-1)
-            else:
-                curword[curposition] = chr(127)
-        if lcd.buttonPressed(lcd.RIGHT):
-            if curposition < DISPLAY_COLS - 1:
-                curword.append('A')
-                curposition += 1
-                lcd.setCursor(curposition, 0)
-            sleep(0.75)
-        if lcd.buttonPressed(lcd.LEFT):
-            curposition -= 1
-            if curposition <  0:
-                lcd.noBlink()
-                return
-            lcd.setCursor(curposition, 0)
-        if lcd.buttonPressed(lcd.SELECT):
-            # return the word
-            sleep(0.75)
-            return ''.join(curword)
-        lcd.home()
-        lcd.message(''.join(curword))
-        lcd.setCursor(curposition, 0)
-        sleep(0.25)
-
-    lcd.noBlink()
-
-# An example of how to get a word input from the UI, and then
-# do something with it
-def EnterWord():
-    if DEBUG:
-        print('in EnterWord')
-    word = GetWord()
-    lcd.clear()
-    lcd.home()
-    if word is not None:
-        lcd.message('>'+word+'<')
-        sleep(5)
-'''
 class CommandToRun:
     def __init__(self, myName, theCommand):
         self.text = myName
@@ -763,16 +669,28 @@ ProcessNode(top, uiItems)
 
 display = Display(uiItems)
 display.display()
+lcdstart = datetime.now()
+
+if DEBUG:
+    print('setup gpio')
+
+
+
+if GPIO.input(channel) == False:
+    if DEBUG:
+        print ('Push');
+global buttonPressed
+buttonPressed = 1
 
 if DEBUG:
     print('start while')
-
-lcdstart = datetime.now()
 
 while 1:
     if DEBUG:
         print ("In main while loop");
     if (buttonPressed):
+        if DEBUG:
+            print ("Button Pushed");
        	display.update('Button!')
         display.display()
         sleep(0.25)
