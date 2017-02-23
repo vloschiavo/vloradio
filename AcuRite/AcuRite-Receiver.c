@@ -2,7 +2,7 @@
  * Written by : Ray Wang (Rayshobby LLC)
  * http://rayshobby.net/?p=8998
  * Update: adapted to RPi using WiringPi
-*/
+ */
 
 // ring buffer size has to be large enough to fit
 // data between two successive sync signals
@@ -10,7 +10,7 @@
 #include <wiringPi.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdbool.h>
+
 
 #define RING_BUFFER_SIZE  256
 
@@ -23,7 +23,7 @@
 #define BIT0_HIGH  220
 #define BIT0_LOW   400
 
-#define DATAPIN  12  // wiringPi 26 - GPIO 12
+#define DATAPIN  20  // wiringPi GPIO 20
 
 unsigned long timings[RING_BUFFER_SIZE];
 unsigned int syncIndex1 = 0;  // index of the first sync signal
@@ -45,7 +45,8 @@ bool isSync(unsigned int idx) {
   printf("4 square waves detected\n");
   // check if there is a long sync period prior to the 4 squarewaves
   unsigned long t = timings[(idx+RING_BUFFER_SIZE-i)%RING_BUFFER_SIZE];
-  if(t<(SYNC_LENGTH-400) || t>(SYNC_LENGTH+400) || digitalRead(DATAPIN) != HIGH) {
+  if(t<(SYNC_LENGTH-400) || t>(SYNC_LENGTH+400) ||
+    digitalRead(DATAPIN) != HIGH) {
     return false;
   }
   printf("sync detected\n");
@@ -126,7 +127,6 @@ int t2b(unsigned int t0, unsigned int t1) {
 
 void loop() {
   if (received == true) {
-    printf("Loop: received = true");
     // disable interrupt to avoid new data corrupting the buffer
 	system("/usr/local/bin/gpio edge 2 none");
     
@@ -188,8 +188,7 @@ void loop() {
 }
 
 int main(int argc, char * args[]){
-	printf("Started and Listening:");
-	if(wiringPiSetupGpio() == -1){
+	if(wiringPiSetup() == -1){
 		printf("no wiring pi detected\n");
 		return 0;
 	}
@@ -200,4 +199,3 @@ int main(int argc, char * args[]){
 	}
 	exit(0);
 }
-
