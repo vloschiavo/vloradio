@@ -21,6 +21,21 @@
 # Interval at which the button needs to be held
 INTERVAL=3
 
+if [ -z $SCRIPTSBASEDIR ]
+then
+	export SCRIPTSBASEDIR="/home/vloschiavo/src/vloradio"
+fi
+
+if [ -z $EPHEMERAL ]
+then
+	export EPHEMERAL="/var/tmp"
+fi
+
+if [ ! -f /var/tmp/pandoraout ]
+then
+	touch /var/tmp/pandoraout
+fi
+
 DISPLAYMESSAGE="${SCRIPTSBASEDIR}/DisplayLCDMessage.py"
 PARSEANDWRITE2LCD="${SCRIPTSBASEDIR}/ParseAndWrite.py"
 

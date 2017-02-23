@@ -43,9 +43,6 @@ ${SCRIPTSBASEDIR}/PianobarVolumeEncoder.py &
 #Start a screen session called 'pianobar' and launch the pianobar binary
 /usr/bin/screen -S pianobar -d -m bash -c 'pianobar'
 
-# Debugging
-#/usr/bin/screen -S pianobar -d -m bash -c 'echo debug; sleep 100000000'
-
 # Give gnu screen and pianobar some time to start up
 # Patiobar requires that the files exist before it will start. Wait for eventcmd.sh to create them
 # While the files don't exist, sleep 1 - once the both exist, then exit the loop
