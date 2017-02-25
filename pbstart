@@ -35,7 +35,17 @@ killall -g gpio-watch > /dev/null 2>&1
 # Setup GPIO Pins and interrupts for push buttons
 /usr/local/bin/gpio -g mode 6 in     # Sets pin mode to input
 /usr/local/bin/gpio -g mode 6 up     # Sets internal pull-up resistor
-/usr/local/bin/gpio-watch 6:switch & # Sets up an interrupt on pin 6 with the "switch" type
+/usr/local/bin/gpio -g mode 12 in
+/usr/local/bin/gpio -g mode 12 up
+/usr/local/bin/gpio -g mode 16 in
+/usr/local/bin/gpio -g mode 16 up
+/usr/local/bin/gpio -g mode 18 in
+/usr/local/bin/gpio -g mode 18 up
+/usr/local/bin/gpio -g mode 20 in
+/usr/local/bin/gpio -g mode 20 up
+/usr/local/bin/gpio -g mode 24 in
+/usr/local/bin/gpio -g mode 24 up
+/usr/local/bin/gpio-watch -e switch 6 12 16 18 20 24 & # Sets up an interrupt on pin 6 with the "switch" type
 
 # Rotary Encoder handler script
 ${SCRIPTSBASEDIR}/PianobarVolumeEncoder.py &

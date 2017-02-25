@@ -8,7 +8,7 @@
 #
 # Adapted to use clock delay versus sleep from: https://www.arduino.cc/en/Tutorial/BlinkWithoutDelay
 # 
-# I put the following commands in rc.local before starting pianobar and patiobar
+# I put the following commands in the pianobar startup script for each button pin
 # gpio -g mode 6 in	# Sets pin mode to input
 # gpio -g mode 6 up	# Sets internal pull-up resistor
 # gpio-watch 6:switch	# Sets up an interrupt on pin 6 with the "switch" type (switch uses a 100ms (100000us) software debounce)
@@ -21,6 +21,8 @@
 # Interval at which the button needs to be held
 INTERVAL=3
 
+
+# Ensure there are some values if they weren't set elsewhere.
 if [ -z $SCRIPTSBASEDIR ]
 then
 	export SCRIPTSBASEDIR="/home/vloschiavo/src/vloradio"
@@ -36,6 +38,8 @@ then
 	touch /var/tmp/pandoraout
 fi
 
+
+#Locations of other scripts
 DISPLAYMESSAGE="${SCRIPTSBASEDIR}/DisplayLCDMessage.py"
 PARSEANDWRITE2LCD="${SCRIPTSBASEDIR}/ParseAndWrite.py"
 
@@ -62,7 +66,6 @@ do
 	else
 		# Display shutdown message
 		$DISPLAYMESSAGE "Shutting Down" "Now Goodbye"
-		#pbstop
 		sudo shutdown -h now		# Power off the Pi
 	fi
 	
