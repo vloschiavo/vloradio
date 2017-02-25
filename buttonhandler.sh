@@ -20,8 +20,8 @@
 #	12		|	Tap=Display Temp	/ Hold=Skip Track
 #	16		|	Tap=Love song		/ Hold=Ban song
 # 	18		|	Tap=Mute/Unmute		/ Hold=Return to sane volume level
+#	19		|	Tap=Play/Pause		/ Hold=Tired of Song
 #	20		|	Tap=Menu/Select		/ Hold=Go back
-#	24		|	Tap=Play/Pause		/ Hold=Tired of Song
 # -----------------------------------------------------------
 #
 # $1 = the GPIO pin triggered
@@ -34,7 +34,14 @@ TRIGGEREDPIN=$1
 # User defined Variables:
 
 # Interval, in seconds, which the button needs to be held
-INTERVAL=3
+
+if [ $TRIGGEREDPIN = 6 ]
+then
+	# Make the interval longer for the shutdown button
+	INTERVAL=3
+else 
+	INTERVAL=1
+fi
 
 # Ensure there are some values if they weren't set elsewhere.
 if [ -z $SCRIPTSBASEDIR ]
@@ -66,9 +73,6 @@ PARSEANDWRITE2LCD="${SCRIPTSBASEDIR}/ParseAndWrite.py"
 ##################################################################
 # Begin Main
 ##################################################################
-
-
-
 
 ##################################################################
 # Determine if the button was a short or long press
@@ -124,6 +128,8 @@ case "$TRIGGEREDPIN" in
 12)	# Display Temperature / Next Song Button
 	if [ $shortlong == "short" ]; then
 		temphumid=`${HOME}/src/Adafruit_Python_DHT/examples/simpletest.py` && $DISPLAYMESSAGE $temphumid
+		sleep 5
+		$PARSEANDWRITE2LCD
 	fi
 
 	if [ $shortlong == "long" ]; then
@@ -136,14 +142,14 @@ case "$TRIGGEREDPIN" in
 
 16)	# Love / Ban Song
 	if [ $shortlong == "short" ]; then
-		# Get the song title
+		# Get the song title and love the song
 		songtitle=`sed -n '1p' $EPHEMERAL/pandoraout`;
         	$DISPLAYMESSAGE "Loving song:" "$songtitle"
 		echo -n '+' >> $CTLFILE
 	fi
 
 	if [ $shortlong == "long" ]; then
-		# Get the song title
+		# Get the song title and ban the song
 		songtitle=`sed -n '1p' $EPHEMERAL/pandoraout`;
         	$DISPLAYMESSAGE "Banning song:" "$songtitle"
 		echo -n '-' >> $CTLFILE
@@ -160,12 +166,12 @@ case "$TRIGGEREDPIN" in
 
 		if [[ $mute =~ \[on\] ]]
 		then 
-			$DISPLAYMESSAGE "Mute is" "On"
+			($DISPLAYMESSAGE "Mute is" "Off"; sleep 1; $PARSEANDWRITE2LCD) &
 		fi
 
 		if [[ $mute =~ \[off\] ]]
 		then 
-			$DISPLAYMESSAGE "Mute is" "Off"
+			($DISPLAYMESSAGE "Mute is" "On"; sleep 1; $PARSEANDWRITE2LCD) &
 		fi
         	
 	fi
@@ -173,10 +179,26 @@ case "$TRIGGEREDPIN" in
 	if [ $shortlong == "long" ]; then
 		$DISPLAYMESSAGE "Resetting" "volume"
 		echo -n '^' >> $CTLFILE
+		sleep 1
+		$PARSEANDWRITE2LCD
 	fi
 
 	;;
 	
+19)	# Play/Pause / Tired of Song
+	if [ $shortlong == "short" ]; then
+		# Indicate the button was pressed then redraw the Now Playing screen
+		($DISPLAYMESSAGE "Play/Pause" ""; sleep 2; $PARSEANDWRITE2LCD) &
+		echo -n 'p' >> $CTLFILE
+	fi
+
+	if [ $shortlong == "long" ]; then
+       		$DISPLAYMESSAGE "Ban song" "for 1 month"
+		echo -n 't' >> $CTLFILE
+	fi
+
+	;;
+
 20)	# Not implemented yet: Menu/Select  /   Go back
 	if [ $shortlong == "short" ]; then
         	$DISPLAYMESSAGE "Menu" "Select"
@@ -188,17 +210,4 @@ case "$TRIGGEREDPIN" in
 
 	;;
 	
-24)	# Play/Pause / Tired of Song
-	if [ $shortlong == "short" ]; then
-		# Indicate the button was pressed then redraw the Now Playing screen
-		($DISPLAYMESSAGE "Play/Pause" ""; sleep 2; $PARSEANDWRITE2LCD) &
-	fi
-
-	if [ $shortlong == "long" ]; then
-       		$DISPLAYMESSAGE "Ban song" "for 1 month"
-		echo -n 't' >> $CTLFILE
-	fi
-
-	;;
-
 esac
