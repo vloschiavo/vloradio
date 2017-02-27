@@ -1,0 +1,15 @@
+begin
+	button = KEY_MUTE
+	prog = irexec
+	config = amixer set PCM toggle
+end
+begin
+	button = KEY_VOLUMEUP
+	prog = irexec
+	config = echo -n '))' >> /var/tmp/ctl
+end
+begin
+	button = KEY_VOLUMEDOWN
+	prog = irexec
+	config = echo -n '((' >> /var/tmp/ctl
+end
