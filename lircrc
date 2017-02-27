@@ -1,7 +1,32 @@
 begin
+	button = KEY_POWER
+	prog = irexec
+	config = pbstop
+end
+begin
+	button = KEY_MODE
+	prog = irexec
+	config = pbstart
+end
+begin
 	button = KEY_MUTE
 	prog = irexec
 	config = amixer set PCM toggle
+end
+begin
+	button = KEY_PLAYPAUSE
+	prog = irexec
+	config = echo -n 'p' >> /var/tmp/ctl
+end
+begin
+	button = KEY_NEXTSONG 
+	prog = irexec
+	config = echo -n 'n' >> /var/tmp/ctl
+end
+begin
+	button = KEY_AUDIO 
+	prog = irexec
+	config = echo -n '^' >> /var/tmp/ctl
 end
 begin
 	button = KEY_VOLUMEUP
@@ -12,4 +37,9 @@ begin
 	button = KEY_VOLUMEDOWN
 	prog = irexec
 	config = echo -n '((' >> /var/tmp/ctl
+end
+begin
+	button = KEY_AB 
+	prog = irexec
+	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 12
 end
