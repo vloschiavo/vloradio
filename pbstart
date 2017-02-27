@@ -41,11 +41,11 @@ killall -g gpio-watch > /dev/null 2>&1
 /usr/local/bin/gpio -g mode 16 up
 /usr/local/bin/gpio -g mode 18 in
 /usr/local/bin/gpio -g mode 18 up
+/usr/local/bin/gpio -g mode 19 in
+/usr/local/bin/gpio -g mode 19 up
 /usr/local/bin/gpio -g mode 20 in
 /usr/local/bin/gpio -g mode 20 up
-/usr/local/bin/gpio -g mode 24 in
-/usr/local/bin/gpio -g mode 24 up
-/usr/local/bin/gpio-watch -e switch 6 12 16 18 20 24 & # Sets up an interrupt on pin 6 with the "switch" type
+/usr/local/bin/gpio-watch -e switch 6 12 16 18 20 & # Sets up an interrupt on pin 6 with the "switch" type
 
 # Rotary Encoder handler script
 ${SCRIPTSBASEDIR}/PianobarVolumeEncoder.py &
