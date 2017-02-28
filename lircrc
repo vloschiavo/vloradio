@@ -1,106 +1,281 @@
+begin power
+	begin
+		# Stop all the things!
+		button = KEY_POWER
+		prog = irexec
+		config = sudo -iu \\#1000 /usr/local/bin/pbstop && poweroff
+		flags = quit mode 
+	end
+	begin
+		# Setup button - start pianobar/patiobar
+		button = BTN_MODE
+		prog = irexec
+		config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh pbstart
+		flags = quit mode 
+	end
+	#begin
+		# Unassigned
+		#button = KEY_SETUP 
+		#prog = irexec
+		#config = echo "Starting pianobar now. / pbstart"
+		#flags = quit mode 
+	#end
+end power
 begin
-	button = KEY_POWER
-	prog = irexec
-	config = sudo -iu \\#1000 /usr/local/bin/pbstop
-end
-begin
-	button = KEY_MODE
-	prog = irexec
-	config = sudo -iu \\#1000 /usr/local/bin/pbstart
-end
-begin
+	# Mute the soundcard toggle and update screen
 	button = KEY_MUTE
 	prog = irexec
 	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh 18
+	flags = quit
 end
 begin
-	button = KEY_PLAYPAUSE
+	# Redraw the now playing screen
+	button = KEY_DISPLAYTOGGLE
 	prog = irexec
-	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh P 
-	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh S
+	config = /home/vloschiavo/src/vloradio/ParseAndWrite.py
+	flags = quit
 end
-begin
-	button = KEY_PREVIOUSSONG 
-	prog = irexec
-	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh plus 
-end
-begin
-	button = KEY_NEXTSONG 
-	prog = irexec
-	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh n
-end
+#begin
+	# KEY_GOTO
+	#button = KEY_GOTO 
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
+#begin
+	# Subtitle 
+	#button = KEY_SUBTITLE
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
 begin
 	button = KEY_AUDIO 
 	prog = irexec
 	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh audio
+	flags = quit
+end
+begin
+	# (-- button) Ban the current song
+	button = KEY_MINUS 
+	prog = irexec
+	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh ban
+	flags = quit
+end
+#begin
+	# Return button = back
+	#button = BTN_BACK
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
+begin
+	button = KEY_VOLUMEDOWN
+	prog = irexec
+	config = echo -n '((' >> /var/tmp/ctl
+	flags = quit
 end
 begin
 	button = KEY_VOLUMEUP
 	prog = irexec
 	config = echo -n '))' >> /var/tmp/ctl
+	flags = quit
 end
+#begin
+	# Channel + Button
+	#button = KEY_CHANNELUP
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
+#begin
+	# Input button
+	#button = KEY_AUX 
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
+#begin
+	# Menu button
+	#button = KEY_MENU 
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
+#begin
+	# < button
+	#button = BTN_LEFT 
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
+#begin
+	# Enter button
+	#button = KEY_ENTER
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
+#begin
+	# > button
+	#button = BTN_RIGHT 
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
+#begin
+	# Slow button
+	#button = KEY_SLOW 
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
+#begin
+	# Stop button
+	#button = KEY_STOP 
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
+#begin
+	# Channel - button
+	#button = KEY_CHANNELDOWN 
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
 begin
-	button = KEY_VOLUMEDOWN
+	# Play pause and update screen
+	button = KEY_PLAYPAUSE
 	prog = irexec
-	config = echo -n '((' >> /var/tmp/ctl
+	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh S
+	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh P 
+	flags = quit
 end
 begin
+	# Like the current song
+	button = KEY_MEDIA_REPEAT 
+	prog = irexec
+	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh plus
+	flags = quit
+end
+begin
+	# Display Temp/Humidity
 	button = KEY_AB 
 	prog = irexec
 	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 12 &
+	flags = quit
 end
+#begin
+	# << button
+	#button = KEY_REWIND 
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
 begin
-	button = KEY_BACK
+	# >> button (Tired of song - pianobar to skip for 30 days)
+	button = KEY_FASTFORWARD 
 	prog = irexec
-	config = /home/vloschiavo/src/vloradio/ParseAndWrite.py
+	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh t
+	flags = quit
 end
 begin
+	# PBC button
+	button = KEY_MP3 
+	prog = irexec
+	config = echo "Power Control Mode enabled."
+	mode = power
+	flags = quit 
+end
+#begin
+	# Zoom button
+	#button = KEY_ZOOM 
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
+#begin
+	# |<< Button
+	#button = KEY_PREVIOUSSONG
+	#prog = irexec
+	#config = 
+	#flags = quit
+#end
+begin
+	# >>| Button (skip to next song in pianobar)
+	button = KEY_NEXTSONG 
+	prog = irexec
+	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh n
+	flags = quit
+end
+begin
+	# Favorite station ZZ Top
 	button = BTN_0
 	prog = irexec
 	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 100 &
+	flags = quit
 end
 begin
+	# Favorite station Stevie Ray Vaughan
 	button = BTN_1
 	prog = irexec
 	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 101 &
+	flags = quit
 end
 begin
+	# Favorite station Jazz Radio
 	button = BTN_2
 	prog = irexec
 	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 102 &
+	flags = quit
 end
 begin
+	# Favorite station Van Halen
 	button = BTN_3
 	prog = irexec
 	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 103 &
+	flags = quit
 end
 begin
+	# Favorite station Louisiana Blues
 	button = BTN_4
 	prog = irexec
 	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 104 &
+	flags = quit
 end
 begin
+	# Favorite station John Coltrane
 	button = BTN_5
 	prog = irexec
 	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 105 &
+	flags = quit
 end
 begin
+	# Favorite station Soundgarden Radio
 	button = BTN_6
 	prog = irexec
 	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 106 &
+	flags = quit
 end
 begin
+	# Favorite station Rock Guitar
 	button = BTN_7
 	prog = irexec
 	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 107 &
+	flags = quit
 end
 begin
+	# Favorite station Miles Davis
 	button = BTN_8
 	prog = irexec
 	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 108 &
+	flags = quit
 end
 begin
+	# Favorite station Master Of Puppets Radio
 	button = BTN_9
 	prog = irexec
 	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 109 &
+	flags = quit
 end

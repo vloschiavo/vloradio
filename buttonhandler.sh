@@ -69,6 +69,23 @@ fi
 DISPLAYMESSAGE="${SCRIPTSBASEDIR}/DisplayLCDMessage.py"
 PARSEANDWRITE2LCD="${SCRIPTSBASEDIR}/ParseAndWrite.py"
 
+##################################################################
+# Get Song Title Function
+##################################################################
+GETSONGTITLE() {
+	songtitle=`sed -n '1p' $EPHEMERAL/pandoraout`;
+}
+
+##################################################################
+# Ban Song Function
+##################################################################
+
+BANSONG() {
+	# Get the song title and ban the song
+	echo -n '-' >> $CTLFILE
+	GETSONGTITLE
+	$DISPLAYMESSAGE "Permanent Ban:" "$songtitle"
+}
 
 ##################################################################
 # Begin Main
@@ -144,15 +161,12 @@ case "$TRIGGEREDPIN" in
 	if [ $shortlong == "short" ]; then
 		# Get the song title and love the song
 		echo -n '+' >> $CTLFILE
-		songtitle=`sed -n '1p' $EPHEMERAL/pandoraout`;
+		GETSONGTITLE
         	$DISPLAYMESSAGE "Loving song:" "$songtitle"
 	fi
 
 	if [ $shortlong == "long" ]; then
-		# Get the song title and ban the song
-		echo -n '-' >> $CTLFILE
-		songtitle=`sed -n '1p' $EPHEMERAL/pandoraout`;
-        	$DISPLAYMESSAGE "Banning song:" "$songtitle"
+		BANSONG
 	fi
 
 	;;
@@ -347,6 +361,27 @@ audio)	# (BTN_AUDIO) Reset Volume
 	amixer sset 'PCM' 95% > /dev/null
 	$DISPLAYMESSAGE "Resetting Volume" ""
 	(sleep 2 && $PARSEANDWRITE2LCD) &
+
+	;;
+	
+ban)	# Reset pianobar's volume
+	BANSONG
+
+	;;
+	
+t)	# (KEY_FASTFORWARD) >> button 
+	# Tired of song - pianobar to skip for 30 days
+	echo -n 't' >> $CTLFILE 
+	
+	$DISPLAYMESSAGE "Banning song for" "30 Days"
+
+	;;
+	
+pbstart) # (PBC) + (SD/USB) button 
+	# 
+	sudo -iu \#1000 /usr/local/bin/pbstart
+	
+	$DISPLAYMESSAGE "Starting" "vLo Radio"
 
 	;;
 	

@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Setup global variables for vloradio
-
 # If $FIRSTBOOT is set in rc.local, then give the pi some time to start before launching
 # This is probably unnecessary
 if [ "$FIRSTBOOT" == "1" ] ; then
@@ -66,9 +65,9 @@ done
 # The "patiobar" after index.js is used as an identifier so we can kill it when stopping.
 #/usr/bin/screen -S pianobar -X screen node index.js patiobar > /dev/null 2>&1 & 
 /usr/bin/screen -S pianobar -X screen node $PATIOBAR/index.js patiobar 
+
 # Debugging
 #node $PATIOBAR/index.js patiobar > /var/tmp/patiobarlog.txt 2>&1 
  
 # Print some stuff to that same window of the 'pianobar' screen
 /usr/bin/screen -S pianobar -p 1 -X stuff $'#Go to http://$(hostname):3000/ to launch the Web interface.\r'
-
