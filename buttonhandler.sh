@@ -127,14 +127,14 @@ case "$TRIGGEREDPIN" in
 
 12)	# Display Temperature / Next Song Button
 	if [ $shortlong == "short" ]; then
-		temphumid=`${HOME}/src/Adafruit_Python_DHT/examples/simpletest.py` && $DISPLAYMESSAGE $temphumid
-		sleep 5
+		temphumid=`/home/vloschiavo/src/Adafruit_Python_DHT/examples/simpletest.py` && $DISPLAYMESSAGE $temphumid
+		sleep 8
 		$PARSEANDWRITE2LCD
 	fi
 
 	if [ $shortlong == "long" ]; then
-        	$DISPLAYMESSAGE "Skipping song" ""
 		echo -n 'n' >> $CTLFILE
+        	$DISPLAYMESSAGE "Skipping song" ""
 	fi
 
 	;;
@@ -143,16 +143,16 @@ case "$TRIGGEREDPIN" in
 16)	# Love / Ban Song
 	if [ $shortlong == "short" ]; then
 		# Get the song title and love the song
+		echo -n '+' >> $CTLFILE
 		songtitle=`sed -n '1p' $EPHEMERAL/pandoraout`;
         	$DISPLAYMESSAGE "Loving song:" "$songtitle"
-		echo -n '+' >> $CTLFILE
 	fi
 
 	if [ $shortlong == "long" ]; then
 		# Get the song title and ban the song
+		echo -n '-' >> $CTLFILE
 		songtitle=`sed -n '1p' $EPHEMERAL/pandoraout`;
         	$DISPLAYMESSAGE "Banning song:" "$songtitle"
-		echo -n '-' >> $CTLFILE
 	fi
 
 	;;
@@ -177,8 +177,8 @@ case "$TRIGGEREDPIN" in
 	fi
 
 	if [ $shortlong == "long" ]; then
-		$DISPLAYMESSAGE "Resetting" "volume"
 		echo -n '^' >> $CTLFILE
+		$DISPLAYMESSAGE "Resetting" "volume"
 		sleep 1
 		$PARSEANDWRITE2LCD
 	fi
@@ -187,14 +187,14 @@ case "$TRIGGEREDPIN" in
 	
 19)	# Play/Pause / Tired of Song
 	if [ $shortlong == "short" ]; then
+		echo -n 'p' >> $CTLFILE
 		# Indicate the button was pressed then redraw the Now Playing screen
 		($DISPLAYMESSAGE "Play/Pause" ""; sleep 2; $PARSEANDWRITE2LCD) &
-		echo -n 'p' >> $CTLFILE
 	fi
 
 	if [ $shortlong == "long" ]; then
-       		$DISPLAYMESSAGE "Ban song" "for 1 month"
 		echo -n 't' >> $CTLFILE
+       		$DISPLAYMESSAGE "Ban song" "for 1 month"
 	fi
 
 	;;
@@ -207,6 +207,146 @@ case "$TRIGGEREDPIN" in
 	if [ $shortlong == "long" ]; then
        		$DISPLAYMESSAGE "Go" "Back"
 	fi
+
+	;;
+	
+100)	# (BTN_0) Favorite Stations Shortcuts - Implemented for IR remote control
+	# Favorite station: ZZ Top
+	STATIONNUM=`grep -i "zz top" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
+	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
+	echo -n 's' >> $CTLFILE
+	echo ${STATIONNUM} >> $CTLFILE
+	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
+
+	;;
+	
+101)	# (BTN_1) Favorite Stations Shortcuts - Implemented for IR remote control
+	# Favorite station: Stevie Ray Vaughan
+	STATIONNUM=`grep -i "Stevie Ray Vaughan" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
+	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
+	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
+	echo -n 's' >> $CTLFILE
+	echo ${STATIONNUM} >> $CTLFILE
+
+	;;
+	
+102)	# (BTN_2) Favorite Stations Shortcuts - Implemented for IR remote control
+	# Favorite station: Jazz  Radio
+	STATIONNUM=`grep -i "Jazz  Radio" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
+	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
+	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
+	echo -n 's' >> $CTLFILE
+	echo ${STATIONNUM} >> $CTLFILE
+
+	;;
+	
+103)	# (BTN_3) Favorite Stations Shortcuts - Implemented for IR remote control
+	# Favorite station: Van Halen
+	STATIONNUM=`grep -i "Van Halen" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
+	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
+	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
+	echo -n 's' >> $CTLFILE
+	echo ${STATIONNUM} >> $CTLFILE
+
+	;;
+	
+104)	# (BTN_4) Favorite Stations Shortcuts - Implemented for IR remote control
+	# Favorite station: Louisiana Blues
+	STATIONNUM=`grep -i "Louisiana Blues" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
+	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
+	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
+	echo -n 's' >> $CTLFILE
+	echo ${STATIONNUM} >> $CTLFILE
+
+	;;
+	
+105)	# (BTN_5) Favorite Stations Shortcuts - Implemented for IR remote control
+	# Favorite station: John Coltrane
+	STATIONNUM=`grep -i "John Coltrane" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
+	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
+	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
+	echo -n 's' >> $CTLFILE
+	echo ${STATIONNUM} >> $CTLFILE
+
+	;;
+	
+106)	# (BTN_6) Favorite Stations Shortcuts - Implemented for IR remote control
+	# Favorite station: Soundgarden Radio
+	STATIONNUM=`grep -i "Soundgarden Radio" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
+	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
+	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
+	echo -n 's' >> $CTLFILE
+	echo ${STATIONNUM} >> $CTLFILE
+
+	;;
+	
+107)	# (BTN_7) Favorite Stations Shortcuts - Implemented for IR remote control
+	# Favorite station: Rock Guitar 
+	STATIONNUM=`grep -i "Rock Guitar" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
+	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
+	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
+	echo -n 's' >> $CTLFILE
+	echo ${STATIONNUM} >> $CTLFILE
+
+	;;
+	
+108)	# (BTN_8) Favorite Stations Shortcuts - Implemented for IR remote control
+	# Favorite station: Miles Davis
+	STATIONNUM=`grep -i "Miles Davis" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
+	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
+	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
+	echo -n 's' >> $CTLFILE
+	echo ${STATIONNUM} >> $CTLFILE
+
+	;;
+	
+109)	# (BTN_9) Favorite Stations Shortcuts - Implemented for IR remote control
+	# Favorite station: Master Of Puppets Radio
+	STATIONNUM=`grep -i "Master Of Puppets Radio" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
+	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
+	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
+	echo -n 's' >> $CTLFILE
+	echo ${STATIONNUM} >> $CTLFILE
+
+	;;
+	
+plus)	# (BTN_PREVIOUSSONG) Like song 
+	echo -n '+' >> $CTLFILE
+	SONGNAME=`awk 'NR==1{print}' ${EPHEMERAL}/pandoraout`
+	$DISPLAYMESSAGE "Liking Song:" "$SONGNAME"
+
+	;;
+	
+n)	# (BTN_NEXTSONG) Skip song 
+	echo -n 'n' >> $CTLFILE
+	SONGNAME=`awk 'NR==1{print}' ${EPHEMERAL}/pandoraout`
+	$DISPLAYMESSAGE "Skipping Song:" "$SONGNAME"
+
+	;;
+	
+P)	# (BTN_PLAYPAUSE) Play
+	echo -n 'P' >> $CTLFILE
+	SONGNAME=`awk 'NR==1{print}' ${EPHEMERAL}/pandoraout`
+	$DISPLAYMESSAGE "Play:" "$SONGNAME"
+	(sleep 3 && $PARSEANDWRITE2LCD) &
+	
+	;;
+	
+S)	# (BTN_PLAYPAUSE) Pause 
+	echo -n 'S' >> $CTLFILE
+	SONGNAME=`awk 'NR==1{print}' ${EPHEMERAL}/pandoraout`
+	$DISPLAYMESSAGE "Paused:" "$SONGNAME"
+
+	;;
+	
+audio)	# (BTN_AUDIO) Reset Volume 
+	# Reset pianobar's volume
+	echo -n '^' >> $CTLFILE 
+	
+	# Reset amixer volume
+	amixer sset 'PCM' 95% > /dev/null
+	$DISPLAYMESSAGE "Resetting Volume" ""
+	(sleep 2 && $PARSEANDWRITE2LCD) &
 
 	;;
 	

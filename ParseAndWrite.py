@@ -14,7 +14,7 @@ import os
 import Adafruit_CharLCD as LCD
 
 # File to read the pandora/pianobar Song Title, Artist, and Station Name
-PANDORAOUT=(os.getenv("EPHEMERAL")+ "/pandoraout")
+PANDORAOUT=(os.getenv("EPHEMERAL", "/var/tmp")+ "/pandoraout")
 
 # LCD/Raspberry Pi pin configuration:
 lcd_rs        = 25  # Note this might need to be changed to 21 for older revision Pi's.

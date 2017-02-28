@@ -1,3 +1,3 @@
 #!/bin/bash
 
-temphumid=`${HOME}/src/Adafruit_Python_DHT/examples/simpletest.py` && ${HOME}/src/vloradio/DisplayLCDMessage.py $temphumid
+temphumid=`/home/vloschiavo/src/Adafruit_Python_DHT/examples/simpletest.py` && /home/vloschiavo/src/vloradio/DisplayLCDMessage.py $temphumid

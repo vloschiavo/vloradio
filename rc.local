@@ -17,10 +17,16 @@ if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
-# Start Patiobar / pianobar
-export FIRSTBOOT=1
+# Setup Environment and Start Patiobar / pianobar
 
-# Sudo to UID 1000
+export FIRSTBOOT=1
+export EPHEMERAL="/var/tmp"
+export SCRIPTSBASEDIR="/home/vloschiavo/src/vloradio"
+export CTLFILE="${EPHEMERAL}/ctl"
+export PATIOBAR="/home/vloschiavo/src/Patiobar"
+
+# Start up message
+sudo -iu \#1000 /home/vloschiavo/src/vloradio/startupdisplay.sh &
 sudo -iu \#1000 /usr/local/bin/pbstart &
 
 exit 0

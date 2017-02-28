@@ -15,10 +15,9 @@ fi
 
 # Ephemeral storage directory - I use TMPFS (ramdrive) storage for this to reduce wear leveling of the microSD card on Raspberry Pi 
 export EPHEMERAL="/var/tmp"
-
-export SCRIPTSBASEDIR="${HOME}/src/vloradio"
+export SCRIPTSBASEDIR="/home/vloschiavo/src/vloradio"
 export CTLFILE="${EPHEMERAL}/ctl"
-export PATIOBAR="${HOME}/src/Patiobar"
+export PATIOBAR="/home/vloschiavo/src/Patiobar"
 
 cd $PATIOBAR
 

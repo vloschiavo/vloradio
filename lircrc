@@ -1,32 +1,38 @@
 begin
 	button = KEY_POWER
 	prog = irexec
-	config = pbstop
+	config = sudo -iu \\#1000 /usr/local/bin/pbstop
 end
 begin
 	button = KEY_MODE
 	prog = irexec
-	config = pbstart
+	config = sudo -iu \\#1000 /usr/local/bin/pbstart
 end
 begin
 	button = KEY_MUTE
 	prog = irexec
-	config = amixer set PCM toggle
+	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh 18
 end
 begin
 	button = KEY_PLAYPAUSE
 	prog = irexec
-	config = echo -n 'p' >> /var/tmp/ctl
+	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh P 
+	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh S
+end
+begin
+	button = KEY_PREVIOUSSONG 
+	prog = irexec
+	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh plus 
 end
 begin
 	button = KEY_NEXTSONG 
 	prog = irexec
-	config = echo -n 'n' >> /var/tmp/ctl
+	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh n
 end
 begin
 	button = KEY_AUDIO 
 	prog = irexec
-	config = echo -n '^' >> /var/tmp/ctl
+	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh audio
 end
 begin
 	button = KEY_VOLUMEUP
@@ -41,5 +47,60 @@ end
 begin
 	button = KEY_AB 
 	prog = irexec
-	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 12
+	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 12 &
+end
+begin
+	button = KEY_BACK
+	prog = irexec
+	config = /home/vloschiavo/src/vloradio/ParseAndWrite.py
+end
+begin
+	button = BTN_0
+	prog = irexec
+	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 100 &
+end
+begin
+	button = BTN_1
+	prog = irexec
+	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 101 &
+end
+begin
+	button = BTN_2
+	prog = irexec
+	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 102 &
+end
+begin
+	button = BTN_3
+	prog = irexec
+	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 103 &
+end
+begin
+	button = BTN_4
+	prog = irexec
+	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 104 &
+end
+begin
+	button = BTN_5
+	prog = irexec
+	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 105 &
+end
+begin
+	button = BTN_6
+	prog = irexec
+	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 106 &
+end
+begin
+	button = BTN_7
+	prog = irexec
+	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 107 &
+end
+begin
+	button = BTN_8
+	prog = irexec
+	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 108 &
+end
+begin
+	button = BTN_9
+	prog = irexec
+	config = /home/vloschiavo/src/vloradio/buttonhandler.sh 109 &
 end
