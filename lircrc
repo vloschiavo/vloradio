@@ -3,7 +3,7 @@ begin power
 		# Stop all the things!
 		button = KEY_POWER
 		prog = irexec
-		config = sudo -iu \\#1000 /usr/local/bin/pbstop && poweroff
+		config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh pbstop
 		flags = quit mode 
 	end
 	begin
@@ -13,13 +13,11 @@ begin power
 		config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh pbstart
 		flags = quit mode 
 	end
-	#begin
-		# Unassigned
-		#button = KEY_SETUP 
-		#prog = irexec
-		#config = echo "Starting pianobar now. / pbstart"
-		#flags = quit mode 
-	#end
+	begin
+		# PBC button - exit from power mode
+		button = KEY_MP3
+		flags = quit mode 
+	end
 end power
 begin
 	# Mute the soundcard toggle and update screen
@@ -68,6 +66,13 @@ end
 	#prog = irexec
 	#config = 
 	#flags = quit
+#end
+#begin
+	# Unassigned
+	#button = KEY_SETUP 
+	#prog = irexec
+	#config = echo "Starting pianobar now. / pbstart"
+	#flags = quit mode 
 #end
 begin
 	button = KEY_VOLUMEDOWN
@@ -181,10 +186,9 @@ begin
 	flags = quit
 end
 begin
-	# PBC button
+	# PBC button - Go into Power control Mode
 	button = KEY_MP3 
 	prog = irexec
-	config = echo "Power Control Mode enabled."
 	mode = power
 	flags = quit 
 end

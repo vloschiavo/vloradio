@@ -378,10 +378,16 @@ t)	# (KEY_FASTFORWARD) >> button
 	;;
 	
 pbstart) # (PBC) + (SD/USB) button 
-	# 
 	sudo -iu \#1000 /usr/local/bin/pbstart
 	
 	$DISPLAYMESSAGE "Starting" "vLo Radio"
+
+	;;
+	
+pbstop) # (PBC) + (SD/USB) button 
+	$DISPLAYMESSAGE "Shutting down" ""
+	sudo -iu \#1000 /usr/local/bin/pbstop
+	poweroff
 
 	;;
 	
