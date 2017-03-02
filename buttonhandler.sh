@@ -141,7 +141,7 @@ case "$TRIGGEREDPIN" in
 
 12)	# Display Temperature / Next Song Button
 	if [ $shortlong == "short" ]; then
-		temphumid=`/home/vloschiavo/src/Adafruit_Python_DHT/examples/simpletest.py` && $DISPLAYMESSAGE $temphumid
+		$SCRIPTSBASEDIR/TempHumidDisplay.sh
 		sleep 8
 		$PARSEANDWRITE2LCD
 	fi

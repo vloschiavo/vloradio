@@ -53,7 +53,6 @@ if humidity is not None and temperature is not None:
     # Convert to Fahrenheit
     array.append("Temp: {0:.1f}\x01F".format(((temperature * 9/5) + 32)))
     array.append('Humidity: {0:0.1f}%'.format(humidity))
-    print('Temp={0:0.1f}*C  Humidity={1:0.1f}%'.format(temperature, humidity))
     
     from DisplayLCDMessage import *
     
