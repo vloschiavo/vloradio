@@ -35,7 +35,7 @@ def main(arguments = []):
   lcd.create_char(1, [7,5,7,0,0,0,0,0]);
  
   # Clear the LCD before writing to it
-  lcd.clear()
+  #lcd.clear()
   
   # Loop through the lines and command line argument and print on each line (additional command line arguments will be ignored)
   for i in range(0,lcd_rows):

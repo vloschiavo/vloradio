@@ -43,31 +43,14 @@ else
 	INTERVAL=1
 fi
 
+
 # Ensure there are some values if they weren't set elsewhere.
 if [ -z $SCRIPTSBASEDIR ]
 then
 	export SCRIPTSBASEDIR="/home/vloschiavo/src/vloradio"
 fi
 
-if [ -z $EPHEMERAL ]
-then
-	export EPHEMERAL="/var/tmp"
-fi
-
-if [ ! -f /var/tmp/pandoraout ]
-then
-	touch /var/tmp/pandoraout
-fi
-
-if [ -z $CTLFILE ]
-then
-	export CTLFILE="/var/tmp/ctl"
-fi
-
-
-#Locations of other scripts
-DISPLAYMESSAGE="${SCRIPTSBASEDIR}/DisplayLCDMessage.py"
-PARSEANDWRITE2LCD="${SCRIPTSBASEDIR}/ParseAndWrite.py"
+. ${SCRIPTSBASEDIR}/config.sh
 
 ##################################################################
 # Get Song Title Function
@@ -86,6 +69,20 @@ BANSONG() {
 	GETSONGTITLE
 	$DISPLAYMESSAGE "Permanent Ban:" "$songtitle"
 }
+
+##################################################################
+# Change Station Function
+##################################################################
+CHANGESTATION() {
+	# Change stations - $1 = Station Name to grep 
+	STATIONNUM=`grep -i "$1" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
+	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
+	echo -n 's' >> $CTLFILE
+	sleep .5
+	echo ${STATIONNUM} >> $CTLFILE
+	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
+}
+
 
 ##################################################################
 # Begin Main
@@ -226,101 +223,60 @@ case "$TRIGGEREDPIN" in
 	
 100)	# (BTN_0) Favorite Stations Shortcuts - Implemented for IR remote control
 	# Favorite station: ZZ Top
-	STATIONNUM=`grep -i "zz top" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
-	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
-	echo -n 's' >> $CTLFILE
-	echo ${STATIONNUM} >> $CTLFILE
-	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
+	CHANGESTATION "zz top"
 
 	;;
 	
 101)	# (BTN_1) Favorite Stations Shortcuts - Implemented for IR remote control
 	# Favorite station: Stevie Ray Vaughan
-	STATIONNUM=`grep -i "Stevie Ray Vaughan" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
-	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
-	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
-	echo -n 's' >> $CTLFILE
-	echo ${STATIONNUM} >> $CTLFILE
-
+	CHANGESTATION "Stevie Ray Vaughan"
 	;;
 	
 102)	# (BTN_2) Favorite Stations Shortcuts - Implemented for IR remote control
 	# Favorite station: Jazz  Radio
-	STATIONNUM=`grep -i "Jazz  Radio" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
-	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
-	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
-	echo -n 's' >> $CTLFILE
-	echo ${STATIONNUM} >> $CTLFILE
+	CHANGESTATION "Jazz  Radio"
 
 	;;
 	
 103)	# (BTN_3) Favorite Stations Shortcuts - Implemented for IR remote control
 	# Favorite station: Van Halen
-	STATIONNUM=`grep -i "Van Halen" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
-	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
-	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
-	echo -n 's' >> $CTLFILE
-	echo ${STATIONNUM} >> $CTLFILE
+	CHANGESTATION "Van Halen"
 
 	;;
 	
 104)	# (BTN_4) Favorite Stations Shortcuts - Implemented for IR remote control
 	# Favorite station: Louisiana Blues
-	STATIONNUM=`grep -i "Louisiana Blues" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
-	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
-	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
-	echo -n 's' >> $CTLFILE
-	echo ${STATIONNUM} >> $CTLFILE
+	CHANGESTATION "Louisiana Blues"
 
 	;;
 	
 105)	# (BTN_5) Favorite Stations Shortcuts - Implemented for IR remote control
 	# Favorite station: John Coltrane
-	STATIONNUM=`grep -i "John Coltrane" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
-	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
-	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
-	echo -n 's' >> $CTLFILE
-	echo ${STATIONNUM} >> $CTLFILE
+	CHANGESTATION "John Coltrane"
 
 	;;
 	
 106)	# (BTN_6) Favorite Stations Shortcuts - Implemented for IR remote control
 	# Favorite station: Soundgarden Radio
-	STATIONNUM=`grep -i "Soundgarden Radio" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
-	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
-	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
-	echo -n 's' >> $CTLFILE
-	echo ${STATIONNUM} >> $CTLFILE
+	CHANGESTATION "Soundgarden Radio"
 
 	;;
 	
 107)	# (BTN_7) Favorite Stations Shortcuts - Implemented for IR remote control
 	# Favorite station: Rock Guitar 
-	STATIONNUM=`grep -i "Rock Guitar" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
-	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
-	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
-	echo -n 's' >> $CTLFILE
-	echo ${STATIONNUM} >> $CTLFILE
+	CHANGESTATION "Rock Guitar"
 
 	;;
 	
 108)	# (BTN_8) Favorite Stations Shortcuts - Implemented for IR remote control
 	# Favorite station: Miles Davis
-	STATIONNUM=`grep -i "Miles Davis" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
-	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
-	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
-	echo -n 's' >> $CTLFILE
-	echo ${STATIONNUM} >> $CTLFILE
+	CHANGESTATION "Miles Davis"
 
 	;;
 	
 109)	# (BTN_9) Favorite Stations Shortcuts - Implemented for IR remote control
 	# Favorite station: Master Of Puppets Radio
-	STATIONNUM=`grep -i "Master Of Puppets Radio" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
-	STATIONNAME=`grep ^${STATIONNUM} ${EPHEMERAL}/stationList | awk -F ":" '{print $2}'`
-	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
-	echo -n 's' >> $CTLFILE
-	echo ${STATIONNUM} >> $CTLFILE
+	CHANGESTATION "Master Of Puppets Radio"
 
 	;;
 	

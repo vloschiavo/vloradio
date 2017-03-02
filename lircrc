@@ -1,4 +1,4 @@
-begin power
+begin POWER
 	begin
 		# Stop all the things!
 		button = KEY_POWER
@@ -7,18 +7,27 @@ begin power
 		flags = quit mode 
 	end
 	begin
-		# Setup button - start pianobar/patiobar
+		# Mode button - start pianobar/patiobar
 		button = BTN_MODE
 		prog = irexec
 		config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh pbstart
 		flags = quit mode 
 	end
 	begin
+		# Setup button - Testing
+		button = KEY_SETUP
+		prog = irexec
+		config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/DisplayLCDMessage.py "Still in mode:" "Power Control"
+		flags = quit 
+	end
+	begin
 		# PBC button - exit from power mode
+		prog = irexec
+		config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/DisplayLCDMessage.py "Leaving mode:" "Power Control"
 		button = KEY_MP3
 		flags = quit mode 
 	end
-end power
+end POWER
 begin
 	# Mute the soundcard toggle and update screen
 	button = KEY_MUTE
@@ -75,15 +84,21 @@ end
 	#flags = quit mode 
 #end
 begin
+	# Using the repeat option: If you hold the remote button, it will run the command after every 2nd receive
+	# Sends Volume control information to pianobar
 	button = KEY_VOLUMEDOWN
 	prog = irexec
 	config = echo -n '((' >> /var/tmp/ctl
+	repeat = 2
 	flags = quit
 end
 begin
+	# Using the repeat option: If you hold the remote button, it will run the command after every 2nd receive
+	# Sends Volume control information to pianobar
 	button = KEY_VOLUMEUP
 	prog = irexec
 	config = echo -n '))' >> /var/tmp/ctl
+	repeat = 2
 	flags = quit
 end
 #begin
@@ -100,13 +115,13 @@ end
 	#config = 
 	#flags = quit
 #end
-#begin
+begin
 	# Menu button
-	#button = KEY_MENU 
-	#prog = irexec
-	#config = 
-	#flags = quit
-#end
+	button = KEY_MENU 
+	prog = irexec
+	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/menu.sh MENU
+	flags = quit 
+end
 #begin
 	# < button
 	#button = BTN_LEFT 
@@ -189,7 +204,8 @@ begin
 	# PBC button - Go into Power control Mode
 	button = KEY_MP3 
 	prog = irexec
-	mode = power
+	config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/DisplayLCDMessage.py "Entering mode:" "Power Control"
+	mode = POWER
 	flags = quit 
 end
 #begin
