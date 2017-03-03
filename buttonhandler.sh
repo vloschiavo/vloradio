@@ -16,12 +16,12 @@
 # Broadcom GPIO 	|
 # Pin number number	|	Function
 # ----------------------------------------------------------
-#	6		|	Tap=Redraw Now Playing 	/ Hold=Shutdown
+#	4		|	Tap=Redraw Now Playing 	/ Hold=Shutdown
 #	12		|	Tap=Display Temp	/ Hold=Skip Track
-#	16		|	Tap=Love song		/ Hold=Ban song
+#	22		|	Tap=Love song		/ Hold=Ban song
 # 	18		|	Tap=Mute/Unmute		/ Hold=Return to sane volume level
-#	19		|	Tap=Play/Pause		/ Hold=Tired of Song
-#	20		|	Tap=Menu/Select		/ Hold=Go back
+#	23		|	Tap=Play/Pause		/ Hold=Tired of Song
+#	24		|	Tap=Menu/Select		/ Hold=Go back
 # -----------------------------------------------------------
 #
 # $1 = the GPIO pin triggered
@@ -35,7 +35,7 @@ TRIGGEREDPIN=$1
 
 # Interval, in seconds, which the button needs to be held
 
-if [ $TRIGGEREDPIN = 6 ]
+if [ $TRIGGEREDPIN = 4 ]
 then
 	# Make the interval longer for the shutdown button
 	INTERVAL=3
@@ -124,7 +124,7 @@ fi
 
 case "$TRIGGEREDPIN" in
 
-6)	# Redraw / Shutdown Pin Pressed
+4)	# Redraw / Shutdown Pin Pressed
 	if [ $shortlong == "short" ]; then
 		# Redraw the "Now Playing Screen"
         	$PARSEANDWRITE2LCD
@@ -154,7 +154,7 @@ case "$TRIGGEREDPIN" in
 	;;
 	
 
-16)	# Love / Ban Song
+22)	# Love / Ban Song
 	if [ $shortlong == "short" ]; then
 		# Get the song title and love the song
 		echo -n '+' >> $CTLFILE
@@ -196,7 +196,7 @@ case "$TRIGGEREDPIN" in
 
 	;;
 	
-19)	# Play/Pause / Tired of Song
+23)	# Play/Pause / Tired of Song
 	if [ $shortlong == "short" ]; then
 		echo -n 'p' >> $CTLFILE
 		# Indicate the button was pressed then redraw the Now Playing screen
@@ -210,7 +210,7 @@ case "$TRIGGEREDPIN" in
 
 	;;
 
-20)	# Not implemented yet: Menu/Select  /   Go back
+24)	# Not implemented yet: Menu/Select  /   Go back
 	if [ $shortlong == "short" ]; then
         	$DISPLAYMESSAGE "Menu" "Select"
 	fi

@@ -20,7 +20,7 @@ from Queue import Queue
 # Define the Broadcom GPIO numbering to define which pins you've hooked up your encoder to:
 # channel A is one side of the three pins, channel b is the other side.  The middle pin goes to ground.
 # channel C is the push button 
-channelA = 13
+channelA = 17
 channelB = 5
 #channelC = 16
 q = Queue()
