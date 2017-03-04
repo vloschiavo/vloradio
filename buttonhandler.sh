@@ -343,7 +343,7 @@ pbstart) # (PBC) + (SD/USB) button
 pbstop) # (PBC) + (SD/USB) button 
 	$DISPLAYMESSAGE "Shutting down" ""
 	sudo -iu \#1000 /usr/local/bin/pbstop
-	poweroff
+	sudo poweroff
 
 	;;
 	
