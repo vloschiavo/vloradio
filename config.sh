@@ -21,16 +21,3 @@ DISPLAYMESSAGE="${SCRIPTSBASEDIR}/DisplayLCDMessage.py"
 
 # Rewrites the "Now Playing" Screen to the display - Current Song Title & Artist
 PARSEANDWRITE2LCD="${SCRIPTSBASEDIR}/ParseAndWrite.py"
-
-# Used by eventcmd (pianobar) to write Current Song Title, Artist, and station
-if [ ! -f /var/tmp/pandoraout ]
-then
-        touch /var/tmp/pandoraout
-fi
-
-if [ ! -p "$CTLFILE" ]
-then
-	mkfifo $CTLFILE
-fi
-
-

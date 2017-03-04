@@ -1,3 +1,12 @@
+# Vince Loschiavo
+# vloradio project - infrared remote control
+#
+# For current versions of Raspberry Pi and raspbian, you'll need to add this to your /boot/config.txt.  This will insert the appropriate kernel modules and settings
+# # Add support for LIRC over GPIO (BCM) Pins
+# dtoverlay=lirc-rpi,gpio_in_pin=27,gpio_in_pull=up
+
+
+
 begin POWER
 	begin
 		# Stop all the things!

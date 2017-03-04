@@ -16,13 +16,13 @@ def main(arguments = []):
   import Adafruit_CharLCD as LCD
   
   # LCD/Raspberry Pi pin configuration (Using the Broadcom Pin Numbers):
-  lcd_rs        = 25
-  lcd_en        = 24
-  lcd_d4        = 23
-  lcd_d5        = 17
+  lcd_rs        = 26
+  lcd_en        = 20
+  lcd_d4        = 19
+  lcd_d5        = 13
   lcd_d6        = 21
-  lcd_d7        = 22
-  lcd_backlight = 4
+  lcd_d7        = 16
+  lcd_backlight = 6
   
   # Define LCD column and row size for 16x2 LCD.
   lcd_columns = 16
