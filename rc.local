@@ -17,6 +17,7 @@ if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
 
+#########################################################
 # Setup Environment and Start Patiobar / pianobar
 
 export FIRSTBOOT=1
@@ -26,5 +27,6 @@ export SCRIPTSBASEDIR="/home/vloschiavo/src/vloradio"
 # Start up message
 sudo -iu \#1000 ${SCRIPTSBASEDIR}/startupdisplay.sh &
 sudo -iu \#1000 /usr/local/bin/pbstart &
+#########################################################
 
 exit 0
