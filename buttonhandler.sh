@@ -339,8 +339,14 @@ pbstart) # (PBC) + (SD/USB) button
 
 	;;
 	
-pbstop) # (PBC) + (SD/USB) button 
-	$DISPLAYMESSAGE "Shutting down" ""
+pbstop) # (PBC) + (Setup) button 
+	$DISPLAYMESSAGE "Stopping" "Pianobar"
+	sudo -iu \#1000 /usr/local/bin/pbstop
+
+	;;
+	
+poweroff) # (PBC) + (Power) button 
+	$DISPLAYMESSAGE "Shutting down" "system"
 	sudo -iu \#1000 /usr/local/bin/pbstop
 	sudo poweroff
 

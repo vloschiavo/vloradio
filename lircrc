@@ -12,7 +12,7 @@ begin POWER
 		# Stop all the things!
 		button = KEY_POWER
 		prog = irexec
-		config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh pbstop
+		config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh poweroff
 		flags = quit mode 
 	end
 	begin
@@ -23,11 +23,11 @@ begin POWER
 		flags = quit mode 
 	end
 	begin
-		# Setup button - Testing
+		# Setup button - stop pianobar/patiobar
 		button = KEY_SETUP
 		prog = irexec
-		config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/DisplayLCDMessage.py "Still in mode:" "Power Control"
-		flags = quit 
+		config = sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh pbstop
+		flags = quit mode
 	end
 	begin
 		# PBC button - exit from power mode
