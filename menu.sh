@@ -154,6 +154,9 @@ CHECKTIMEOUT(){
 #
 ##################################################################
 
+
+
+
 case "$BUTTON" in
 
 	MENU)
@@ -208,4 +211,23 @@ esac
 #CHECKTIMEOUT
 ##################################################################
 
+##########################
+##!/bin/bash
+#
+#configFile=./crap.sh
+#
+#. $configFile
+#
+#writeConfig() {
+#        key=$1
+#        [ -z "$key" ] && return
+#        value=$2
+#        sed -i "/$key=/c\\$key=$value" $configFile
+# Remove in favor of creating the file on boot #        [ -z "$( grep $key= $configFile )" ] && echo "$key=$value" > $configFile
+#}
+#
+#
+#[ -n "$1" ] && {
+#        writeConfig $@
+#}
 

@@ -1,19 +1,23 @@
 #!/bin/bash
 
+export SCRIPTSBASEDIR="/home/vloschiavo/src/vloradio"
+. ${SCRIPTSBASEDIR}/config.sh
+
 # Setup global variables for vloradio
-# If $FIRSTBOOT is set in rc.local, then give the pi some time to start before launching
-# This is probably unnecessary
+# If $FIRSTBOOT is set in rc.local, then give the pi some time to start before launching, and display startup message
 if [ "$FIRSTBOOT" == "1" ] ; then
 	# Give the Raspberry Pi plenty of time to boot before trying to start vloradio
+
+	# Read the current release name and version number into an array and print that.
+	. /etc/*-release; array=( $PRETTY_NAME )
+	${SCRIPTSBASEDIR}/DisplayLCDMessage.py "${array[0]} ${array[2]}" "...started." > /dev/null 2>&1
 	sleep 10
+	${SCRIPTSBASEDIR}/DisplayLCDMessage.py "Starting:" "...vLo Radio" > /dev/null 2>&1
 	export FIRSTBOOT=0
 else 
 	# This script ($0) isn't being called at boot by rc.local, so start normally
-	export FIRSTBOOT=0;
+	${SCRIPTSBASEDIR}/DisplayLCDMessage.py "Starting:" "...vLo Radio" > /dev/null 2>&1
 fi
-
-export SCRIPTSBASEDIR="/home/vloschiavo/src/vloradio"
-. ${SCRIPTSBASEDIR}/config.sh
 
 cd $PATIOBAR
 
@@ -32,15 +36,15 @@ killall -g gpio-watch > /dev/null 2>&1
 /usr/local/bin/gpio -g mode 4 up     # Sets internal pull-up resistor
 /usr/local/bin/gpio -g mode 12 in
 /usr/local/bin/gpio -g mode 12 up
-/usr/local/bin/gpio -g mode 22 in
-/usr/local/bin/gpio -g mode 22 up
 /usr/local/bin/gpio -g mode 18 in
 /usr/local/bin/gpio -g mode 18 up
+/usr/local/bin/gpio -g mode 22 in
+/usr/local/bin/gpio -g mode 22 up
 /usr/local/bin/gpio -g mode 23 in
 /usr/local/bin/gpio -g mode 23 up
 /usr/local/bin/gpio -g mode 24 in
 /usr/local/bin/gpio -g mode 24 up
-/usr/local/bin/gpio-watch -e switch 4 12 22 18 23 24 & # Sets up an interrupt on pin 6 with the "switch" type
+/usr/local/bin/gpio-watch -e switch 4 12 18 22 23 24 & # Sets up an interrupt on pin 6 with the "switch" type
 
 # Rotary Encoder handler script
 ${SCRIPTSBASEDIR}/PianobarVolumeEncoder.py &
@@ -60,11 +64,9 @@ done
 # Create a second window in the 'pianobar' screen and launch Patiobar (the web gui) in it
 # Allow stdout and errors to print to this window
 # The "patiobar" after index.js is used as an identifier so we can kill it when stopping.
-#/usr/bin/screen -S pianobar -X screen node index.js patiobar > /dev/null 2>&1 & 
 /usr/bin/screen -S pianobar -X screen node $PATIOBAR/index.js patiobar 
 
-# Debugging
-#node $PATIOBAR/index.js patiobar > /var/tmp/patiobarlog.txt 2>&1 
- 
 # Print some stuff to that same window of the 'pianobar' screen
-/usr/bin/screen -S pianobar -p 1 -X stuff $'#Go to http://$(hostname):3000/ to launch the Web interface.\r'
+/usr/bin/screen -S pianobar -p 1 -X stuff $'\r##############################################################\r'
+/usr/bin/screen -S pianobar -p 1 -X stuff $"#Go to http://$(hostname):3000/ to launch the Web interface.\r"
+/usr/bin/screen -S pianobar -p 1 -X stuff $'##############################################################\r'
