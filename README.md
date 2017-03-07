@@ -60,6 +60,23 @@ sudo -iu \#1000 /usr/local/bin/pbstart &
 
 exit 0
 
+# Stop logging of useless gpio messages
+Add the following to the beginning of the Rules section of /etc/rsyslog.conf
+
+# Filter GPIO Messages
+if $msg contains 'gpiomem device opened' then /dev/null
+& stop
+
+sudo service rsyslog restart
+
+
+Add temperature_monitoring.sh to root's crontab
+sudo crontabe -e
+
+# Monitor temperature every 10 minutes
+00,10,20,30,40,50 * * * * /home/vloschiavo/src/vloradio/temperature_monitoring.sh > /dev/null 2>&1
+
+
 Edit the config.sh file to your paths. Other scripts source their configs from config.sh
 
 Suggestion:  Make use of tmpfs to reduce wear on your SD card.  Everytime pianobar changes song, eventcmd writes to a file current data on the song.  I use tmpfs (ramdrive) to save the SD card writes.

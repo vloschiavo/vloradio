@@ -53,26 +53,23 @@ fi
 . ${SCRIPTSBASEDIR}/config.sh
 
 ##################################################################
-# Get Song Title Function
+# Functions
 ##################################################################
+
+# Get Song Title
 GETSONGTITLE() {
-	songtitle=`sed -n '1p' $EPHEMERAL/pandoraout`;
+	read -r songtitle < ${EPHEMERAL}/pandoraout
 }
 
-##################################################################
-# Ban Song Function
-##################################################################
-
-BANSONG() {
-	# Get the song title and ban the song
-	echo -n '-' >> $CTLFILE
+# Effect some song based action on pianobar (i.e. ban, love, skip, etc)
+# $1=pianobar command letter ;  $2=Message to display on LCD line 1.  Line 2 will display the song title
+SONGACTION() {
+	echo -n "$1" >> $CTLFILE
 	GETSONGTITLE
-	$DISPLAYMESSAGE "Permanent Ban:" "$songtitle"
+	$DISPLAYMESSAGE "$2" "$songtitle"	
 }
 
-##################################################################
-# Change Station Function
-##################################################################
+# Change Station
 CHANGESTATION() {
 	# Change stations - $1 = Station Name to grep 
 	STATIONNUM=`grep -i "$1" ${EPHEMERAL}/stationList | awk -F ":" '{print $1}'`
@@ -83,15 +80,36 @@ CHANGESTATION() {
 	$DISPLAYMESSAGE "New Station:" "$STATIONNAME"
 }
 
+# Reset pianobar and alsa's volume levels
+RESETAUDIO() {
+	# Reset pianobar's volume
+	echo -n '^' >> $CTLFILE 
+	
+	# Reset amixer volume
+	amixer sset 'PCM' 95% > /dev/null
+	$DISPLAYMESSAGE "Resetting Volume" ""
+	(sleep 2 && $PARSEANDWRITE2LCD) &
+
+}
+
+# Stop all daemons and poweroff
+POWEROFF() {
+	$DISPLAYMESSAGE "Shutting down" "system"
+	sudo -iu \#1000 /usr/local/bin/pbstop
+	sudo poweroff
+
+}
+
+
 
 ##################################################################
 # Begin Main
 ##################################################################
 
-##################################################################
 # Determine if the button was a short or long press
-##################################################################
+
 shortlong=""
+
 # Get the current time in seconds since Epoch
 PREVIOUSSECONDS=`date +%s`
 
@@ -131,9 +149,8 @@ case "$TRIGGEREDPIN" in
 	fi
 
 	if [ $shortlong == "long" ]; then
-                # Display shutdown message and shutdown
-                $DISPLAYMESSAGE "Shutting Down" "Now Goodbye"
-                sudo shutdown -h now            # Power off the Pi
+		# Stop everything
+		POWEROFF
 	fi
 
 	;;
@@ -156,14 +173,11 @@ case "$TRIGGEREDPIN" in
 
 22)	# Love / Ban Song
 	if [ $shortlong == "short" ]; then
-		# Get the song title and love the song
-		echo -n '+' >> $CTLFILE
-		GETSONGTITLE
-        	$DISPLAYMESSAGE "Loving song:" "$songtitle"
+		SONGACTION "+" "Loving song"
 	fi
 
 	if [ $shortlong == "long" ]; then
-		BANSONG
+		SONGACTION "-" "Banning song"
 	fi
 
 	;;
@@ -177,35 +191,32 @@ case "$TRIGGEREDPIN" in
 
 		if [[ $mute =~ \[on\] ]]
 		then 
-			($DISPLAYMESSAGE "Mute is" "Off"; sleep 1; $PARSEANDWRITE2LCD) &
+			($DISPLAYMESSAGE "Mute is" "Off"; sleep 1.5; $PARSEANDWRITE2LCD) &
 		fi
 
 		if [[ $mute =~ \[off\] ]]
 		then 
-			($DISPLAYMESSAGE "Mute is" "On"; sleep 1; $PARSEANDWRITE2LCD) &
+			($DISPLAYMESSAGE "Mute is" "On") &
 		fi
         	
 	fi
 
 	if [ $shortlong == "long" ]; then
-		echo -n '^' >> $CTLFILE
-		$DISPLAYMESSAGE "Resetting" "volume"
-		sleep 1
-		$PARSEANDWRITE2LCD
+		# Reset all audio to default levels
+		RESETAUDIO
 	fi
 
 	;;
 	
 23)	# Play/Pause / Tired of Song
 	if [ $shortlong == "short" ]; then
-		echo -n 'p' >> $CTLFILE
+		SONGACTION "p" "Play/Pause"
 		# Indicate the button was pressed then redraw the Now Playing screen
-		($DISPLAYMESSAGE "Play/Pause" ""; sleep 2; $PARSEANDWRITE2LCD) &
+		(sleep 2; $PARSEANDWRITE2LCD) &
 	fi
 
 	if [ $shortlong == "long" ]; then
-		echo -n 't' >> $CTLFILE
-       		$DISPLAYMESSAGE "Ban song" "for 1 month"
+		SONGACTION "t" "Ban for 1 month:"
 	fi
 
 	;;
@@ -280,76 +291,80 @@ case "$TRIGGEREDPIN" in
 
 	;;
 	
-plus)	# (BTN_PREVIOUSSONG) Like song 
-	echo -n '+' >> $CTLFILE
-	SONGNAME=`awk 'NR==1{print}' ${EPHEMERAL}/pandoraout`
-	$DISPLAYMESSAGE "Liking Song:" "$SONGNAME"
+plus)	# (BTN_PREVIOUSSONG) Love song
+	SONGACTION "+" "Love song:"
+	(sleep 3 && $PARSEANDWRITE2LCD) &
 
 	;;
 	
 n)	# (BTN_NEXTSONG) Skip song 
-	echo -n 'n' >> $CTLFILE
-	SONGNAME=`awk 'NR==1{print}' ${EPHEMERAL}/pandoraout`
-	$DISPLAYMESSAGE "Skipping Song:" "$SONGNAME"
+	SONGACTION "n" "Skip song:"
 
 	;;
 	
 P)	# (BTN_PLAYPAUSE) Play
-	echo -n 'P' >> $CTLFILE
-	SONGNAME=`awk 'NR==1{print}' ${EPHEMERAL}/pandoraout`
-	$DISPLAYMESSAGE "Play:" "$SONGNAME"
+	SONGACTION "P" "Play:"
 	(sleep 3 && $PARSEANDWRITE2LCD) &
 	
 	;;
 	
 S)	# (BTN_PLAYPAUSE) Pause 
-	echo -n 'S' >> $CTLFILE
-	SONGNAME=`awk 'NR==1{print}' ${EPHEMERAL}/pandoraout`
-	$DISPLAYMESSAGE "Paused:" "$SONGNAME"
+	SONGACTION "S" "Paused:"
 
 	;;
 	
-audio)	# (BTN_AUDIO) Reset Volume 
-	# Reset pianobar's volume
-	echo -n '^' >> $CTLFILE 
-	
-	# Reset amixer volume
-	amixer sset 'PCM' 95% > /dev/null
-	$DISPLAYMESSAGE "Resetting Volume" ""
-	(sleep 2 && $PARSEANDWRITE2LCD) &
+audio)	# (BTN_AUDIO) Reset Volume
+	RESETAUDIO
 
 	;;
 	
-ban)	# Reset pianobar's volume
-	BANSONG
+ban)	# Bansong
+	SONGACTION "-" "Ban song:"
 
 	;;
 	
 t)	# (KEY_FASTFORWARD) >> button 
 	# Tired of song - pianobar to skip for 30 days
-	echo -n 't' >> $CTLFILE 
-	
-	$DISPLAYMESSAGE "Banning song for" "30 Days"
+	SONGACTION "t" "Ban for 1 month:"
 
 	;;
 	
 pbstart) # (PBC) + (SD/USB) button 
-	$DISPLAYMESSAGE "Starting" "vLo Radio"
+	# Startup vloradio
 	sudo -iu \#1000 /usr/local/bin/pbstart
 
 	;;
 	
 pbstop) # (PBC) + (Setup) button 
+	# Stop vloradio
 	$DISPLAYMESSAGE "Stopping" "Pianobar"
 	sudo -iu \#1000 /usr/local/bin/pbstop
 
 	;;
 	
-poweroff) # (PBC) + (Power) button 
-	$DISPLAYMESSAGE "Shutting down" "system"
-	sudo -iu \#1000 /usr/local/bin/pbstop
-	sudo poweroff
+poweroff) # (PBC) + (Power) button
+	POWEROFF
 
 	;;
 	
+INPUT) # (Input) button
+	# Display CPU and GPU Temps
+
+	# Get the GPU Temp
+	GPUTEMP=`vcgencmd measure_temp | cut -d"=" -f2 | cut -f1 -d"'"`
+
+	# Get the CPU Temp and format it
+	CPUTEMP=$(</sys/class/thermal/thermal_zone0/temp)
+	CPUTEMP=$(echo ${CPUTEMP::-3}.${CPUTEMP:2:1})
+
+	# Check for high temp
+	if [ `echo $GPUTEMP | cut -d"." -f1` -gt 45 ] || [ `echo $CPUTEMP | cut -d"." -f1` -gt 45 ]
+	then
+		$DISPLAYMESSAGE "Temp High!!!" "C:${CPUTEMP}C G:${GPUTEMP}C"
+	else
+		$DISPLAYMESSAGE "CPU Temp: ${CPUTEMP}C" "GPU Temp: ${GPUTEMP}C"
+		(sleep 6; $PARSEANDWRITE2LCD) &
+	fi
+
+	;;
 esac

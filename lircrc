@@ -117,13 +117,13 @@ end
 	#config = 
 	#flags = quit
 #end
-#begin
-	# Input button
-	#button = KEY_AUX 
-	#prog = irexec
-	#config = 
-	#flags = quit
-#end
+begin
+	# (Input) button
+	button = KEY_AUX 
+	prog = irexec
+	config = sudo -iu \\#1000 sudo -iu \\#1000 /home/vloschiavo/src/vloradio/buttonhandler.sh INPUT
+	flags = quit
+end
 begin
 	# Menu button
 	button = KEY_MENU 

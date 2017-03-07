@@ -21,6 +21,8 @@ fi
 
 # Import configs
 . ${SCRIPTSBASEDIR}/config.sh
+MENUCTL=${EPHEMERAL}/menuctl
+. ${MENUCTL}
 ##################################################################
 
 
